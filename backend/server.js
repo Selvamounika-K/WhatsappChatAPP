@@ -9,8 +9,20 @@ const app = express();
 const server = http.createServer(app);
 
 // CORS configuration
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.FRONTEND_URL,
+  "http://localhost:3000",
+  "https://whatsappchatapplication.vercel.app"
+].filter(Boolean);
+
 const corsOptions = {
-  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  origin: (origin, callback) => {
+    // allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error("Not allowed by CORS"), false);
+  },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
@@ -20,17 +32,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Handle preflight OPTIONS requests for all routes
-app.use((req, res, next) => {
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Origin", process.env.CLIENT_URL || "http://localhost:3000");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.header("Access-Control-Allow-Credentials", "true");
-    return res.sendStatus(200);
-  }
-  next();
-});
+// Note: cors middleware above will handle preflight automatically; no extra app.options needed
 
 // Socket.IO configuration
 const io = socketIo(server, {
