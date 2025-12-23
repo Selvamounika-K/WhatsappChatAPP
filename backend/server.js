@@ -16,12 +16,21 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"]
 };
 
-// Apply CORS to all routes
+// Apply CORS for all routes
 app.use(cors(corsOptions));
-// Handle preflight OPTIONS requests
-app.options("*", cors(corsOptions));
-
 app.use(express.json());
+
+// Handle preflight OPTIONS requests for all routes
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Origin", process.env.CLIENT_URL || "http://localhost:3000");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 // Socket.IO configuration
 const io = socketIo(server, {
