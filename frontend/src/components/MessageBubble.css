@@ -1,0 +1,75 @@
+.message-bubble-wrapper {
+  display: flex;
+  margin-bottom: 4px;
+}
+
+.message-bubble-wrapper.sent {
+  justify-content: flex-end;
+}
+
+.message-bubble-wrapper.received {
+  justify-content: flex-start;
+}
+
+.message-bubble {
+  max-width: 65%;
+  padding: 6px 7px 8px 9px;
+  border-radius: 7.5px;
+  position: relative;
+  word-wrap: break-word;
+}
+
+.message-bubble.sent {
+  background: #dcf8c6;
+  margin-left: auto;
+}
+
+.message-bubble.received {
+  background: white;
+  margin-right: auto;
+}
+
+.message-content {
+  font-size: 14.2px;
+  line-height: 19px;
+  color: #111;
+  margin-bottom: 2px;
+}
+
+.message-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.message-time {
+  font-size: 11px;
+  color: #667781;
+  line-height: 15px;
+}
+
+.message-status {
+  display: flex;
+  align-items: center;
+}
+
+.status-icon {
+  display: flex;
+  align-items: center;
+  color: #667781;
+}
+
+.status-icon.sent {
+  color: #667781;
+}
+
+.status-icon.delivered {
+  color: #667781;
+}
+
+.status-icon.read {
+  color: #4fc3f7;
+}
+
